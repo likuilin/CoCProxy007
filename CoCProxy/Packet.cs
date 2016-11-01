@@ -24,19 +24,19 @@ namespace CoCProxy007
             // maybe one day we know the 'unknown' and use it
             byte[] unknown = new byte[2]; // 2 byte - unknown
 
+            bool IsLittleEndian = BitConverter.IsLittleEndian;
+
             using (MemoryStream memoryStream = new MemoryStream(buffer, 0, length))
             using (BinaryReader binaryReader = new BinaryReader(memoryStream))
             {
-                // we do 'Reverse' because it's big endian (like eat egg from down to up)
-
                 // read 2 bytes from first offest
-                packetId = binaryReader.ReadBytes(packetId.Length).Reverse().ToArray();
+                packetId = IsLittleEndian ? binaryReader.ReadBytes(packetId.Length).Reverse().ToArray() : binaryReader.ReadBytes(packetId.Length);
 
                 // read 3 next bytes after packet id bytes
-                payloadLen = binaryReader.ReadBytes(payloadLen.Length).Reverse().ToArray();
+                payloadLen = IsLittleEndian ? binaryReader.ReadBytes(payloadLen.Length).Reverse().ToArray() : binaryReader.ReadBytes(payloadLen.Length);
 
                 // read 2 next bytes after payload length
-                unknown = binaryReader.ReadBytes(unknown.Length).Reverse().ToArray();
+                unknown = IsLittleEndian ? binaryReader.ReadBytes(unknown.Length).Reverse().ToArray() : binaryReader.ReadBytes(unknown.Length);
             }
 
             // we create new 4 byte array and add payloadLen bytes + one zero byte because theres no int24 in C#
