@@ -78,13 +78,13 @@ namespace CoCProxy007
         static void LogPacket(bool fromServer, byte[] buffer, int bufferLength)
         {
             // get packet id
-            ushort packetId = PacketParser.GetPacketID(buffer, bufferLength);
+            Packet packet = Packet.Parse(buffer, bufferLength);
 
             // create packet file name
-            string packetFileName = PacketsFolder + "\\" + string.Format("[{0}][{1}] {2}.packet", fromServer ? "S" : "C", DateTime.Now.ToString("hh.mm.ss.fff"), packetId);
+            string packetFileName = PacketsFolder + "\\" + string.Format("[{0}][{1}] {2}.packet", fromServer ? "S" : "C", DateTime.Now.ToString("hh.mm.ss.fff"), packet.ID);
 
             // write packet info to console
-            Console.WriteLine("[S {0} C]  PacketID:{1} Length:{2}", fromServer ? "=>" : "<=", packetId, bufferLength);
+            Console.WriteLine("[S {0} C]  PacketID:{1} PayloadLength:{2} Unknown:{3} Length:{4}", fromServer ? "=>" : "<=", packet.ID, packet.PayloadLength, packet.Unknown, bufferLength);
 
             // create packet dumps directory when it does not exist
             if (!Directory.Exists(PacketsFolder))
