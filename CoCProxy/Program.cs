@@ -77,7 +77,7 @@ namespace CoCProxy007
 
         static void LogPacket(bool fromServer, byte[] buffer, int bufferLength)
         {
-            // get packet id
+            // get packet 
             Packet packet = Packet.Parse(buffer, bufferLength);
 
             // create packet file name
@@ -94,7 +94,7 @@ namespace CoCProxy007
             using(FileStream fileStream = File.Open(packetFileName, FileMode.Create, FileAccess.Write))
             {
                 // write buffer
-                fileStream.Write(buffer, 0, bufferLength);
+                fileStream.Write(packet.EncryptedMessage, 0, packet.EncryptedMessage.Length);
             }
         }
     }
